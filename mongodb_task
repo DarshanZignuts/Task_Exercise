@@ -1,0 +1,296 @@
+> use darshanp // >database use or created
+> db.createCollaction.department // >createcollation in running database
+> db.department.insertMany([
+  {
+    name: 'js_devloper', 
+    _id: 01,
+    created_date:'2022-01-03'
+  },
+  {
+    name: 'nodeJs',
+    _id: 02,
+    created_date:'2022-01-03'
+  },
+  {
+    name: 'reactJs',
+    _id: 03,
+    created_date:'2022-01-03'
+  },
+  {
+    name: 'php_laravel',
+    _id: 04,
+    created_date:'2022-01-03'
+  },
+  {
+    name: 'devops',
+    _id: 05,
+    created_date:'2022-01-03'
+  },
+  {
+    name: 'android',
+    _id: 06,
+    created_date:'2022-01-03'
+  },
+  {
+    name: 'java',
+    _id: 07,
+    created_date:'2022-01-03'
+  }
+  ])  // >data insert in department collection
+> db.deparment.find().pretty()
+
+> db.createCollaction.employee // >createcollation in running database
+> db.employee.insertMany([
+  {    
+    _id: 11,
+    name: 'darshan patel',
+    dept_id: 01,
+    number: 7383869227,
+    join_date: '2022-01-03',
+    end_date: '2024-01-03'
+  },
+  {    
+    _id: 12,
+    name: 'vimal solanki',
+    dept_id: 01,
+    number: 9525394638,
+    join_date: '2021-11-03',
+    end_date: '2023-12-03'
+  },
+  {    
+    _id: 13,
+    name: 'dhwani prajapati',
+    dept_id: 06,
+    number: 8536698369,
+    join_date: '2022-01-03',
+    end_date: '2024-01-03'
+  },
+  {    
+    _id: 14,
+    name: 'kartik patel',
+    dept_id: 02,
+    number: 8523697415,
+    join_date: '2021-12-03',
+    end_date: '2024-01-03'
+  },
+  {    
+    _id: 15,
+    name: 'kenil bhanderi',
+    dept_id: 05,
+    number: 7538697415,
+    join_date: '2022-01-03',
+    end_date: '2024-02-03'
+  },
+  {    
+    _id: 16,
+    name: 'manthan panchal',
+    dept_id: 04,
+    number: 7419632589,
+    join_date: '2021-12-03',
+    end_date: '2024-02-03'
+  },
+  {    
+    _id: 17,
+    name: 'krunal patel',
+    dept_id: 03,
+    number: 7585964823,
+    join_date: '2022-01-03',
+    end_date: '2024-02-03'
+  }
+  ]) // > data insert in employee collection
+
+> db.employee.find().pretty();
+
+> db.createCollaction.salary // >createcollation in running database
+> db.salary.insertMany([
+  {
+    eid: 12,
+    _id: 21,
+    month: "nov",
+    year:"2021",
+    amount: 19500,
+    generated_date:"2021-12-03"
+  }, 
+  {
+    eid: 11,
+    _id: 22,
+    month: "dec",
+    year:"2021",
+    amount: 10000,
+    generated_date:"2022-01-03"
+  }, 
+  {
+    eid: 15,
+    _id: 23,
+    month: "dec",
+        year:"2021",
+        amount: 20000,
+        generated_date:"2022-01-03"
+    }, 
+    {
+        eid: 11,
+        _id: 24,
+        month: "jan",
+        year:"2022",
+        amount: 12500,
+        generated_date:"2022-02-03"
+    }, 
+    {
+        eid: 14,
+        _id: 25,
+        month: "jan",
+        year:"2022",
+        amount: 10500,
+        generated_date:"2022-02-03"
+    },
+    {
+        eid: 13,
+        _id: 26,
+        month: "nov",
+        year:"2021",
+        amount: 19500,
+        generated_date:"2021-12-03"
+    }, 
+    {
+        eid: 17,
+        _id: 27,
+        month: "dec",
+        year:"2021",
+        amount: 10000,
+        generated_date:"2022-01-03"
+    }, 
+    {
+        eid: 14,
+        _id: 28,
+        month: "dec",
+        year:"2021",
+        amount: 20000,
+        generated_date:"2022-01-03"
+    }, 
+    {
+        eid: 13,
+        _id: 29,
+        month: "jan",
+        year:"2022",
+        amount: 12500,
+        generated_date:"2022-02-03"
+    }, 
+    {
+        eid: 16,
+        _id: 30,
+        month: "jan",
+        year:"2022",
+        amount: 10500,
+        generated_date:"2022-02-03"
+    },
+]) // >data insert in salary collection
+> db.salary.find().pretty();
+
+ // >show all documnets using aggregation  by employee _id both side
+> db.employee.aggregate([
+    {
+      $limit : 5
+    },
+    {
+      $skip : 0
+    },
+    {
+      $lookup:   
+       { 
+          from: "department",
+          localField : "dept_id", 
+          foreignField : "_id", 
+          as : "department_detail"
+        }
+    },
+    {
+      $lookup:   
+        { 
+          from: "salary",
+          localField : "_id", 
+          foreignField : "eid", 
+          as : "salary_detail"
+        }
+    },
+    {
+      $sort: 
+      {
+        _id : -1
+      }
+    },
+    {
+      $project: 
+      {
+        _id: 1,
+        name: 1,
+        join_date:1,
+        department_detail: 1,
+        salary_detail: 1
+      }
+    }
+  ])
+
+// >update single data by direct field in department
+> db.department.findOneAndUpdate(
+  {
+    _id: 4
+  },
+  {
+    $set: {
+      name: "php"
+    }
+  },
+  {
+    new : true
+  }
+)
+
+// >update single data by direct field in employee 
+> db.employee.findOneAndUpdate(
+    { name: "krunal patel" },
+    {
+        $set :{
+          dept_id : 2
+        }
+    },
+    {
+      new : true
+    }
+  )
+
+// >update single data by condition in salary
+> db.salary.findOneAndUpdate(
+  {
+    amount: {$lt :12000}
+  },
+  {
+    $set : {
+      amount : 15500
+    }
+  },
+  {
+    new : true
+  }
+)
+
+// >update many data by condition in salary
+> db.salary.updateMany(
+  {
+    amount: {$gt :15000}
+  },
+  {
+    $set : {
+      amount : 12500
+    }
+  },
+  {
+    new : true
+  }
+)
+
+// > delete documents by direct field name and value in salary table
+> db.salary.deleteMany(
+  {
+    month : "jan"
+  }
+  )
